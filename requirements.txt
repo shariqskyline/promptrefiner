@@ -7,12 +7,12 @@ exceptiongroup==1.3.0
 fastapi==0.116.0
 filelock==3.18.0
 fsspec==2025.5.1
-future @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/future-0.18.2-py3-none-any.whl
+future==0.18.2
 hf-xet==1.1.5
 huggingface-hub==0.33.2
 idna==3.10
 Jinja2==3.1.6
-macholib @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/macholib-1.15.2-py2.py3-none-any.whl
+macholib==1.15.2
 MarkupSafe==3.0.2
 mpmath==1.3.0
 networkx==3.2.1
@@ -24,7 +24,7 @@ PyYAML==6.0.2
 regex==2024.11.6
 requests==2.32.4
 safetensors==0.5.3
-six @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/six-1.15.0-py2.py3-none-any.whl
+six==1.15.0
 sniffio==1.3.1
 starlette==0.46.2
 sympy==1.14.0
