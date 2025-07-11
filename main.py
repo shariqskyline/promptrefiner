@@ -7,7 +7,7 @@ import os
 # Initialize FastAPI
 app = FastAPI()
 
-# Corrected model name for the lighter version
+# Model name (light version)
 model_name = "alibaba-pai/Qwen2-1.5B-Instruct-Refine"
 
 # Load tokenizer and model
@@ -21,16 +21,16 @@ try:
 except Exception as e:
     raise RuntimeError(f"Model loading failed: {e}")
 
-# Define request model
+# Request model
 class PromptRequest(BaseModel):
     prompt: str
 
+# Endpoint to refine prompt
 @app.post("/refine-prompt/")
 async def refine_prompt(request: PromptRequest):
-    # User input prompt
     user_prompt = request.prompt
 
-    # Refiner instruction
+    # Prompt formatting for the model
     messages = [
         {
             "role": "system",
@@ -44,20 +44,24 @@ async def refine_prompt(request: PromptRequest):
         {"role": "user", "content": user_prompt}
     ]
 
-    # Tokenize the messages
-    inputs = tokenizer(messages, return_tensors="pt", padding=True, truncation=True).to(model.device)
+    # Convert messages to a plain prompt string
+    combined_prompt = ""
+    for msg in messages:
+        role = msg["role"].capitalize()
+        combined_prompt += f"{role}: {msg['content']}\n"
 
-    # Generate output
+    # Tokenize and run inference
     try:
+        inputs = tokenizer(combined_prompt, return_tensors="pt", padding=True, truncation=True).to(model.device)
         output = model.generate(**inputs, max_new_tokens=128, num_return_sequences=1)
         refined = tokenizer.decode(output[0][inputs.input_ids.shape[-1]:], skip_special_tokens=True)
-        refined = refined.split("Refined Prompt:")[-1].strip()  # Adjust according to your output format
+        refined = refined.split("Refined Prompt:")[-1].strip()  # Adjust if needed
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during inference: {e}")
 
     return {"refined_prompt": refined}
 
-# Uvicorn run block for deployment
+# Uvicorn run block
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
